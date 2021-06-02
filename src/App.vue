@@ -1,48 +1,48 @@
 <template>
   <div id="app">
     <!-- <Cadastro /> -->
-    <form action="#" method="post">
+    <form @submit="postData" method="post">
       <fieldset>
         <fieldset class="grupo">
           <div class="campo">
-            <label for="MatriculaEstudante">Matricula estudante: </label>
+            <label for="matriculaEstudante">Matricula estudante: </label>
             <input
               type="text"
-              id="MatriculaEstudante"
-              name="MatriculaEstudante"
+              id="matriculaEstudante"
+              name="matriculaEstudante"
               style="width: 10em"
-              value=""
+              v-model="posts.matriculaEstudante"
             />
           </div>
           <div class="campo">
-            <label for="NomeEstudante">Nome Estudante: </label>
+            <label for="nomeEstudante">Nome Estudante: </label>
             <input
               type="text"
-              id="NomeEstudante"
-              name="NomeEstudante"
+              id="nomeEstudante"
+              name="nomeEstudante"
               style="width: 10em"
-              value=""
+              v-model="posts.nomeEstudante"
             />
           </div>
         </fieldset>
         <div class="campo">
-          <label for="email">Nome Cliente</label>
+          <label for="nomeCliente">Nome Cliente</label>
           <input
             type="text"
-            id="NomeCliente"
-            name="NomeCliente"
+            id="nomeCliente"
+            name="nomeCliente"
             style="width: 20em"
-            value=""
+            v-model="posts.nomeCliente"
           />
         </div>
         <div class="campo">
-          <label for="EndereçoCliente">Endereço cliente</label>
+          <label for="enderecoCliente">Endereço cliente</label>
           <input
             type="text"
-            id="EndereçoCliente"
-            name="EndereçoClientee"
+            id="enderecoCliente"
+            name="enderecoCliente"
             style="width: 10em"
-            value=""
+            v-model="posts.enderecoCliente"
           />
         </div>
 
@@ -52,7 +52,7 @@
             <div>
               <select>
                 <option v-for="(estado, index) in estados" :key="index.id">{{
-                  estado.sigla
+                  estado.nome
                 }}</option>
               </select>
             </div>
@@ -72,12 +72,21 @@
 </template>
 
 <script>
+import Vue from "vue";
 import axios from "axios";
+import VueAxios from "vue-axios";
+Vue.use(VueAxios, axios);
 export default {
   name: "App",
   data() {
     return {
       estados: [],
+      posts: {
+        matriculaEstudante: null,
+        nomeEstudante: null,
+        nomeCliente: null,
+        enderecoCliente: null,
+      },
     };
   },
   created: function() {
@@ -87,6 +96,16 @@ export default {
         this.estados = res.data;
         console.log(this.estados);
       });
+  },
+  methods: {
+    postData(e) {
+      this.axios
+        .post("https://web-unit.herokuapp.com/cliente", this.posts)
+        .then((result) => {
+          console.warn(result);
+        });
+      e.preventDefault();
+    },
   },
 };
 </script>
@@ -101,4 +120,4 @@ export default {
   margin-top: 60px;
 }
 </style>
-// v-for="(estado, index) in estados" :key="index.id"
+
